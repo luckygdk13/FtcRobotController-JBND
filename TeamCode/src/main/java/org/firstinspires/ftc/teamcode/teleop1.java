@@ -35,7 +35,9 @@ public class teleop1 extends LinearOpMode {
             double backLeftPower = leftY - leftX + rightX;
             double frontRightPower = leftY - leftX - rightX;
             double backRightPower = leftY + leftX - rightX;
-            double shootPower = 1;
+            int dpaddown = 0;
+            int dpadup = 0;
+            double shootPower = 0.77;
             double max = Math.max(1.0, Math.max(Math.abs(frontLeftPower),
                     Math.max(Math.abs(backLeftPower),
                             Math.max(Math.abs(frontRightPower), Math.abs(backRightPower)))));
@@ -49,19 +51,25 @@ public class teleop1 extends LinearOpMode {
                 IntakeMotor.setPower(1);
                 BeltMotor.setPower(1);
             }
-            if (gamepad1.a) {
+            if (gamepad1.b) {
+                IntakeMotor.setPower(-0.7);
+            }if (gamepad1.a) {
                 IntakeMotor.setPower(-0.7);
                 BeltMotor.setPower(-0.7);
             }
-            if (!gamepad1.x && !gamepad1.a) {
+            if (!gamepad1.x && !gamepad1.a && !gamepad1.b) {
                 IntakeMotor.setPower(0);
                 BeltMotor.setPower(0);
             }
             if (gamepad1.left_bumper) {
                 ShooterMotorPollen.setPower(shootPower);
+                StopperServoPollen.setPosition(1);
+                wait(3000);
+                BeltMotor.setPower(1);
             }
             if (!gamepad1.left_bumper) {
                 ShooterMotorPollen.setPower(0);
+                StopperServoPollen.setPosition(0);
             }
             if (gamepad1.right_bumper) {
                 //ShooterMotorNectar.setPower(1);
@@ -69,10 +77,10 @@ public class teleop1 extends LinearOpMode {
             if (!gamepad1.right_bumper) {
                 //ShooterMotorNectar.setPower(0);
             }
-            if (gamepad1.left_trigger == 0){
-                StopperServoPollen.setPosition(0.5);
+            if (gamepad1.left_trigger > 0){
+                StopperServoPollen.setPosition(0.3);
             }else {
-                StopperServoPollen.setPosition(1);
+                StopperServoPollen.setPosition(0);
             }
 
             frontLeftPower /= max;
