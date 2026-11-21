@@ -35,9 +35,7 @@ public class teleop1 extends LinearOpMode {
             double backLeftPower = leftY - leftX + rightX;
             double frontRightPower = leftY - leftX - rightX;
             double backRightPower = leftY + leftX - rightX;
-            int dpaddown = 0;
-            int dpadup = 0;
-            double shootPower = dpadup - dpaddown + 1;
+            double shootPower = 1;
             double max = Math.max(1.0, Math.max(Math.abs(frontLeftPower),
                     Math.max(Math.abs(backLeftPower),
                             Math.max(Math.abs(frontRightPower), Math.abs(backRightPower)))));
@@ -70,13 +68,6 @@ public class teleop1 extends LinearOpMode {
             }
             if (!gamepad1.right_bumper) {
                 //ShooterMotorNectar.setPower(0);
-            }
-            while (gamepad2.dpad_down) {
-                dpaddown += 0.15;}
-
-
-            while (gamepad2.dpad_up) {
-                dpadup += 0.15;
             }
             if (gamepad1.left_trigger == 0){
                 StopperServoPollen.setPosition(0.5);
