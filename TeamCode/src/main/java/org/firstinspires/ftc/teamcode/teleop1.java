@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
 public class teleop1 extends LinearOpMode {
@@ -21,6 +22,8 @@ public class teleop1 extends LinearOpMode {
         ShooterMotorPollen = hardwareMap.get(DcMotor.class, "ShooterMotorPollen");
         //ShooterMotorNectar = hardwaremap.get(DcMotor.class,"ShooterMotorNectar");
         StopperServoPollen = hardwareMap.get(Servo.class, "StopperServoPollen");
+        ElapsedTime shooterTimer = new ElapsedTime();
+        boolean wasLeftBumperPressed = false;
 
         Motor0.setDirection(DcMotor.Direction.REVERSE);
         Motor1.setDirection(DcMotor.Direction.REVERSE);
@@ -62,25 +65,26 @@ public class teleop1 extends LinearOpMode {
                 BeltMotor.setPower(0);
             }
             if (gamepad1.left_bumper) {
+                if(!gamepad1.leftBumperWasPressed()) {
+                    shooterTimer.reset();
+                    wasLeftBumperPressed = true;
+                }
                 ShooterMotorPollen.setPower(shootPower);
-                StopperServoPollen.setPosition(1);
-                wait(3000);
-                BeltMotor.setPower(1);
-            }
-            if (!gamepad1.left_bumper) {
-                ShooterMotorPollen.setPower(0);
-                StopperServoPollen.setPosition(0);
+                if (shooterTimer.milliseconds() >= 3000) {
+                    StopperServoPollen.setPosition(0.4);
+                    BeltMotor.setPower(1);
+                }else {
+                    wasLeftBumperPressed = false;
+                    ShooterMotorPollen.setPower(0);
+                    StopperServoPollen.setPosition(0);
+                    BeltMotor.setPower(0);
+                }
             }
             if (gamepad1.right_bumper) {
                 //ShooterMotorNectar.setPower(1);
             }
             if (!gamepad1.right_bumper) {
                 //ShooterMotorNectar.setPower(0);
-            }
-            if (gamepad1.left_trigger > 0){
-                StopperServoPollen.setPosition(0.3);
-            }else {
-                StopperServoPollen.setPosition(0);
             }
 
             frontLeftPower /= max;
