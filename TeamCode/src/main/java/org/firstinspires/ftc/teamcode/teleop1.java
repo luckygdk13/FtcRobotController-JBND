@@ -65,14 +65,22 @@ public class teleop1 extends LinearOpMode {
                 BeltMotor.setPower(0);
             }
             if (gamepad1.left_bumper) {
-                if(!gamepad1.leftBumperWasPressed()) {
+                if(gamepad1.leftBumperWasPressed()) {
                     shooterTimer.reset();
                     wasLeftBumperPressed = true;
                 }
-                ShooterMotorPollen.setPower(shootPower);
+                if (gamepad1.leftBumperWasReleased()){
+                    wasLeftBumperPressed = false;
+                    ShooterMotorPollen.setPower(0);
+                    StopperServoPollen.setPosition(0);
+                    BeltMotor.setPower(0);
+                }
+                ShooterMotorPollen.setPower(0.77);
+                BeltMotor.setPower(1);
                 if (shooterTimer.milliseconds() >= 3000) {
+
+                    ShooterMotorPollen.setPower(0.77);
                     StopperServoPollen.setPosition(0.4);
-                    BeltMotor.setPower(1);
                 }else {
                     wasLeftBumperPressed = false;
                     ShooterMotorPollen.setPower(0);
